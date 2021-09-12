@@ -11,3 +11,9 @@ npm install axios
   eslint src/* --fix   
 
   npm i --save-dev @types/react-router-dom
+
+  to run => npm run start
+
+npm install --save-dev jest
+npm i --save-dev enzyme enzyme-adapter-react-16
+npm install --save @types/enzyme

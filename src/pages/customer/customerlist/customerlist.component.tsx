@@ -4,17 +4,19 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {Dispatch} from "redux";
 import CustomerListItem from "../../../components/customer/customerlist/customerlist-item.component";
 import {ICustomer} from "../../../models/icustomer";
-import {searchCustomers} from "../../../redux/customerlist/customerlist.actions";
+import {retrieveCustomers} from "../../../redux/customer/customer.actions";
+// import {searchCustomers} from "../../../redux/customerlist/customerlist.actions";
 import {AppState} from "../../../redux/store";
 
 import {AddCustomerButon, PageContainer} from "./customerlist.styles";
 
 
 interface ICustomerListProps {
-    searchCustomers: (customer: string) => void;
+    retrieveCustomers: (name: string) => void;
 }
 
-interface ICustomerListState extends RouteComponentProps<any>{
+// interface ICustomerListState extends RouteComponentProps<any>{
+interface ICustomerListState {
     customers: ICustomer[];
 }
 
@@ -24,41 +26,56 @@ interface ICustomerListState extends RouteComponentProps<any>{
 type RouterProps = RouteComponentProps<any>;
 // type NonReduxProps = NonRouterNorReduxProps & RouterProps;
 // type NonReduxProps = NonRouterNorReduxProps & RouterProps;
-type Props = ICustomerListState & RouterProps&ICustomerListProps;
+type Props = RouterProps&ICustomerListProps;
 
 const textInput = React.createRef<HTMLInputElement>();
 
 class CustomerList extends React.Component<Props, ICustomerListState> {
-    render() {
-        console.log(this.props);
-        // const {customers} = this.props;
-        return (
-            <PageContainer>
-                <h1 className="title"> Customer List </h1>
-                <div>
+        public state: ICustomerListState = {
+            customers:  []
+        };
+
+        constructor(props: any) {
+            super(props);
+            this.getCustomerList = this.getCustomerList.bind(this);
+        }
+
+        getCustomerList() {
+            this.props.retrieveCustomers((textInput.current?.value) ? (textInput.current?.value) : "");
+        }
+
+        componentDidMount() {
+            this.getCustomerList();
+        }
+
+        render() {
+            console.log(this.props);
+            // const {customers} = this.props;
+            return (
+                <PageContainer>
+                    <h1 className="title"> Customer List </h1>
+                    <div>
                     search customer from name: <input type="text" ref={textInput}></input>
-                    <button
-                        onClick={() => {
-                            this.props.searchCustomers((textInput.current?.value) ? (textInput.current?.value) : "");
-                        }}
-                    >
+                        <button
+                            onClick={ this.getCustomerList }
+                        >
                     Search
-                    </button>
-                    <AddCustomerButon
-                        onClick={() => this.props.history.push("addcustomer")}
-                    >
+                        </button>
+                        <AddCustomerButon
+                            onClick={() => this.props.history.push("addcustomer")}
+                        >
                     Add new customer
-                    </AddCustomerButon>
-                </div>
-                <div>Customer List</div>
-                <div className="preview">
-                    {this.props.customers?.map(item => (
-                        <CustomerListItem key={item.id} customer={item} linkUrl=""/>
-                    ))}
-                </div>
-            </PageContainer>
-        );
-    }
+                        </AddCustomerButon>
+                    </div>
+                    <div>Customer List</div>
+                    <div className="preview">
+                        {this.state.customers?.map(item => (
+                            <CustomerListItem key={item.id} customer={item} linkUrl=""/>
+                        ))}
+                    </div>
+                </PageContainer>
+            );
+        }
 }
 
 
@@ -68,7 +85,7 @@ const mapStateToProps = (state:AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    searchCustomers: (name:any) => dispatch<any>(searchCustomers(name))
+    retrieveCustomers: (name:any) => dispatch<any>(retrieveCustomers(name))
 });
 
 export default withRouter(

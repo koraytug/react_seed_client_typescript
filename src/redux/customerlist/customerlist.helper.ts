@@ -3,7 +3,7 @@ import axios from "axios";
 
 export function getCustomerList(name:string):any {
     axios({
-        url: "http://localhost:4400/customerList",
+        url: "http://localhost:4000/customerList",
         method: "get",
         data: {
             customername: name

@@ -54,7 +54,7 @@ class AddCustomer extends Component<IAddCustomerProps, IAddCustomerState> {
         const name = target.name;
 
         this.setState({
-            ...this.state, [name]: value
+            ...this.state, customer: {...this.state.customer, [name]: value}
         });
     }
 

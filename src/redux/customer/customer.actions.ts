@@ -39,10 +39,10 @@ export const createCustomer = (customer: ICustomer) => {
 
 };
 
-export const retrieveCustomers = () => {
+export const retrieveCustomers = (customerName: string) => {
     return async (dispatch: Dispatch): Promise<any> => {
         try {
-            const res = await CustomerDataService.getAll();
+            const res = await CustomerDataService.getAll(customerName);
             dispatch({
                 type: RETRIEVE_CUSTOMERS,
                 payload: res.data
@@ -64,7 +64,7 @@ export const updateCustomer = (id: string, data: ICustomer) => {
                 payload: data
             });
 
-            return Promise.resolve(res.data);
+            return Promise.resolve(await res.data);
         } catch (err) {
             return Promise.reject(err);
         }
