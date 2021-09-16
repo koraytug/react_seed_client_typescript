@@ -16,10 +16,10 @@ class CustomerDataService {
             headers: {
 
             },
-            data : QueryData
+            data: QueryData
         })
         .then(response => {
-            return Promise.resolve(response);
+            return Promise.resolve({...response});
         })
         .catch(error => {
             throw error;
